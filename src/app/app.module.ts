@@ -1,6 +1,7 @@
 import { APP_ROUTES } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -20,6 +21,7 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     APP_ROUTES,
     PagesModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
