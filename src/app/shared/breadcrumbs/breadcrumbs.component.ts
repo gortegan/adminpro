@@ -23,7 +23,7 @@ export class BreadcrumbsComponent implements OnInit {
         name: 'description',
         content: this.label
 
-      }
+      };
       this.meta.updateTag(metaTag);
       console.log(data);
 

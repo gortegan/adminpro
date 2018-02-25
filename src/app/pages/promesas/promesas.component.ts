@@ -26,8 +26,7 @@ export class PromesasComponent implements OnInit {
         contador += 1;
         console.log(contador);
         if (contador === 3) {
-          //reject('Simplemente un error');
-          resolve('OK!');
+          resolve();
           clearInterval(intervalo);
         }
       }, 1000);
