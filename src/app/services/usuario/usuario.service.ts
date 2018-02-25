@@ -1,17 +1,18 @@
 import { Usuario } from './../../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Usuario } from '../../models/usuario.model';
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
+import { SubirArchivoService } from '../service.index';
 
 @Injectable()
 export class UsuarioService {
 
   usuario: Usuario;
   token: string;
+  alertify = require('alertifyjs');
 
-  constructor(public http: HttpClient, public router: Router) {
+  constructor(public http: HttpClient, public router: Router, public _subirArchivo: SubirArchivoService) {
     this.cargarStorage();
   }
 
@@ -29,7 +30,7 @@ export class UsuarioService {
     if (localStorage.getItem('token')) {
       this.token = localStorage.getItem('token');
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
-    }else{
+    } else {
       this.token = '';
       this.usuario = null;
 
@@ -79,7 +80,29 @@ export class UsuarioService {
             });
   }
 
+  actualizarUsuario(usuario: Usuario) {
+    console.log(usuario);
+    let url = URL_SERVICIOS + '/usuario/' + usuario._id + '?token=' + this.token;
+    console.log(url);
+    return this.http.put(url, usuario)
+              .map( (resp: any) => {
+                this.guardarStorage(resp.usuario._id, this.token, resp.usuario);
+                return true;
+              });
+  }
+
   estaLogueado() {
     return (this.token.length > 5) ? true : false;
+  }
+
+  cambiarImagen(file: File, id: string) {
+    this._subirArchivo.subirArchivo(file, 'usuarios' , id)
+              .then( (resp:any) => {
+                this.usuario.img = resp.img;
+                this.guardarStorage(id, this.token, this.usuario);
+              })
+              .catch( err => {
+                console.log(err);
+              });
   }
 }
